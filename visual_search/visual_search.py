@@ -5,7 +5,6 @@ from __future__ import print_function
 import argparse
 import time
 import urllib
-import os
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -49,10 +48,10 @@ def initModel():
     x = tf.placeholder(tf.float32, (None,) + xdim)
     # conv1
     # conv(11, 11, 96, 4, 4, padding='VALID', name='conv1')
-    k_h = 11;
-    k_w = 11;
-    c_o = 96;
-    s_h = 4;
+    k_h = 11
+    k_w = 11
+    c_o = 96
+    s_h = 4
     s_w = 4
     conv1W = tf.Variable(net_data["conv1"][0])
     conv1b = tf.Variable(net_data["conv1"][1])
@@ -61,9 +60,9 @@ def initModel():
 
     # lrn1
     # lrn(2, 2e-05, 0.75, name='norm1')
-    radius = 2;
-    alpha = 2e-05;
-    beta = 0.75;
+    radius = 2
+    alpha = 2e-05
+    beta = 0.75
     bias = 1.0
     lrn1 = tf.nn.local_response_normalization(conv1,
                                               depth_radius=radius,
@@ -73,20 +72,20 @@ def initModel():
 
     # maxpool1
     # max_pool(3, 3, 2, 2, padding='VALID', name='pool1')
-    k_h = 3;
-    k_w = 3;
-    s_h = 2;
-    s_w = 2;
+    k_h = 3
+    k_w = 3
+    s_h = 2
+    s_w = 2
     padding = 'VALID'
     maxpool1 = tf.nn.max_pool(lrn1, ksize=[1, k_h, k_w, 1], strides=[1, s_h, s_w, 1], padding=padding)
 
     # conv2
     # conv(5, 5, 256, 1, 1, group=2, name='conv2')
-    k_h = 5;
-    k_w = 5;
-    c_o = 256;
-    s_h = 1;
-    s_w = 1;
+    k_h = 5
+    k_w = 5
+    c_o = 256
+    s_h = 1
+    s_w = 1
     group = 2
     conv2W = tf.Variable(net_data["conv2"][0])
     conv2b = tf.Variable(net_data["conv2"][1])
@@ -95,9 +94,9 @@ def initModel():
 
     # lrn2
     # lrn(2, 2e-05, 0.75, name='norm2')
-    radius = 2;
-    alpha = 2e-05;
-    beta = 0.75;
+    radius = 2
+    alpha = 2e-05
+    beta = 0.75
     bias = 1.0
     lrn2 = tf.nn.local_response_normalization(conv2,
                                               depth_radius=radius,
@@ -107,20 +106,20 @@ def initModel():
 
     # maxpool2
     # max_pool(3, 3, 2, 2, padding='VALID', name='pool2')
-    k_h = 3;
-    k_w = 3;
-    s_h = 2;
-    s_w = 2;
+    k_h = 3
+    k_w = 3
+    s_h = 2
+    s_w = 2
     padding = 'VALID'
     maxpool2 = tf.nn.max_pool(lrn2, ksize=[1, k_h, k_w, 1], strides=[1, s_h, s_w, 1], padding=padding)
 
     # conv3
     # conv(3, 3, 384, 1, 1, name='conv3')
-    k_h = 3;
-    k_w = 3;
-    c_o = 384;
-    s_h = 1;
-    s_w = 1;
+    k_h = 3
+    k_w = 3
+    c_o = 384
+    s_h = 1
+    s_w = 1
     group = 1
     conv3W = tf.Variable(net_data["conv3"][0])
     conv3b = tf.Variable(net_data["conv3"][1])
@@ -129,11 +128,11 @@ def initModel():
 
     # conv4
     # conv(3, 3, 384, 1, 1, group=2, name='conv4')
-    k_h = 3;
-    k_w = 3;
-    c_o = 384;
-    s_h = 1;
-    s_w = 1;
+    k_h = 3
+    k_w = 3
+    c_o = 384
+    s_h = 1
+    s_w = 1
     group = 2
     conv4W = tf.Variable(net_data["conv4"][0])
     conv4b = tf.Variable(net_data["conv4"][1])
@@ -142,11 +141,11 @@ def initModel():
 
     # conv5
     # conv(3, 3, 256, 1, 1, group=2, name='conv5')
-    k_h = 3;
-    k_w = 3;
-    c_o = 256;
-    s_h = 1;
-    s_w = 1;
+    k_h = 3
+    k_w = 3
+    c_o = 256
+    s_h = 1
+    s_w = 1
     group = 2
     conv5W = tf.Variable(net_data["conv5"][0])
     conv5b = tf.Variable(net_data["conv5"][1])
@@ -155,10 +154,10 @@ def initModel():
 
     # maxpool5
     # max_pool(3, 3, 2, 2, padding='VALID', name='pool5')
-    k_h = 3;
-    k_w = 3;
-    s_h = 2;
-    s_w = 2;
+    k_h = 3
+    k_w = 3
+    s_h = 2
+    s_w = 2
     padding = 'VALID'
     maxpool5 = tf.nn.max_pool(conv5, ksize=[1, k_h, k_w, 1], strides=[1, s_h, s_w, 1], padding=padding)
 
@@ -223,10 +222,10 @@ def crop(np_img):
     image = Image.fromarray(np_img)
     width, height = image.size
     box = (width * 0.2, height * 0.2, width * 0.8, height * 0.8)
-    crop = image.crop(box)
-    image = Image.new('RGBA', crop.size)
-    box = (0, 0, crop.size[0], crop.size[1])
-    image.paste(crop, box)
+    crop_image = image.crop(box)
+    image = Image.new('RGBA', crop_image.size)
+    box = (0, 0, crop_image.size[0], crop_image.size[1])
+    image.paste(crop_image, box)
     return np.asarray(image)
 
 

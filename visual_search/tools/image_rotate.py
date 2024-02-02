@@ -1,21 +1,21 @@
 # -*- coding=utf-8 -*-
 from __future__ import absolute_import
 from __future__ import print_function
+
 import argparse
-import matplotlib.pyplot as plt
-import numpy as np
+
+from scipy import misc
 from scipy import ndimage
 from scipy.misc import imread
-from scipy import misc
 
 args = None
+
 
 # https://github.com/tiagopereira/python_tips/wiki/Scipy:-image-rotation
 def main():
     img = imread(args.input_path)
     img = ndimage.rotate(img, args.angle, mode=args.mode)
     misc.imsave(args.output_path, img)
-
 
 
 if __name__ == '__main__':
